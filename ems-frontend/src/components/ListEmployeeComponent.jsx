@@ -1,32 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { listEmployees } from "../services/EmployeeService";
 
 function ListEmployeeComponent() {
-    const dummyData = [
-        {
-          id: "1",
-          firstName: "Anıl",
-          lastName: "Yaşar",
-          email: "mock@gmail.com",
-        },
-        {
-          id: "2",
-          firstName: "Ece",
-          lastName: "Loş",
-          email: "mockdata@gmail.com",
-        },
-        {
-          id: "3",
-          firstName: "Kaan",
-          lastName: "Gınık",
-          email: "mock2@gmail.com",
-        },
-        {
-          id: "4",
-          firstName: "Olci",
-          lastName: "Bulut",
-          email: "mock@gmail.com",
-        },
-      ];
+    const [employees, setEmployees] = useState([]);
+
+    useEffect(() => {
+        listEmployees()
+        .then((response) => {
+            setEmployees(response.data);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    }, [])
 
     return (
         <div className="container">
@@ -42,7 +29,7 @@ function ListEmployeeComponent() {
                 </thead>
                 <tbody>
                     {
-                        dummyData.map(employee => (
+                        employees.map(employee => (
                             <tr key={employee.id}>
                                 <td>{employee.id}</td>
                                 <td>{employee.firstName}</td>
@@ -58,3 +45,34 @@ function ListEmployeeComponent() {
 }
 
 export default ListEmployeeComponent;
+
+
+
+
+
+    // const dummyData = [
+    //     {
+    //       id: "1",
+    //       firstName: "Anıl",
+    //       lastName: "Yaşar",
+    //       email: "mock@gmail.com",
+    //     },
+    //     {
+    //       id: "2",
+    //       firstName: "Ece",
+    //       lastName: "Loş",
+    //       email: "mockdata@gmail.com",
+    //     },
+    //     {
+    //       id: "3",
+    //       firstName: "Kaan",
+    //       lastName: "Gınık",
+    //       email: "mock2@gmail.com",
+    //     },
+    //     {
+    //       id: "4",
+    //       firstName: "Olci",
+    //       lastName: "Bulut",
+    //       email: "mock@gmail.com",
+    //     },
+    //   ];
