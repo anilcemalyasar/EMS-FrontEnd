@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createEmployee, getEmployee } from '../services/EmployeeService';
+import { createEmployee, deleteEmployee, getEmployee, updateEmployee } from '../services/EmployeeService';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function AddEmployeeComponent() {
@@ -75,22 +75,34 @@ function AddEmployeeComponent() {
 
     }
 
-    const saveEmployee = (e) => {
+    const saveOrUpdateEmployee = (e) => {
         e.preventDefault();
-
+        
         if (validateForm()) {
             const employee = {firstName, lastName, email, age};
             console.log(employee);
-    
-            createEmployee(employee).then((response) => {
-                console.log(response.data);
-            });
+
+            if (id) {
+                updateEmployee(id, employee).then((response) => {
+                    console.log(response.data);
+                    navigator("/employees")
+                }).catch(error => {
+                    console.error(error);
+                })
+            } else {
+                createEmployee(employee).then((response) => {
+                        console.log(response.data);
+                        navigator("/employees");
+                }).catch(error => {
+                    console.error(error);
+                })
+            };
     
             // navigate to listed employees
-            navigator("/employees");
         }
 
     }
+
 
     const pageTitle = (id) => {
         if (id) {
@@ -166,7 +178,7 @@ function AddEmployeeComponent() {
                             { errors.age && <div className='invalid-feedback'>{ errors.age }</div>}
                         </div>
 
-                        <button className='btn btn-success' onClick={saveEmployee}>Submit</button>
+                        <button className='btn btn-success' onClick={saveOrUpdateEmployee}>Submit</button>
                     </form>
                 </div>
             </div>
